@@ -7,6 +7,7 @@ Any pygame program that you create will have this basic code
 import pygame
 import sys
 
+print("tst")
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Player, self).__init__()
