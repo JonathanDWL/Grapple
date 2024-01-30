@@ -6,6 +6,7 @@ Any pygame program that you create will have this basic code
 
 import pygame
 import sys
+import math
 
 
 class Player(pygame.sprite.Sprite):
@@ -23,36 +24,38 @@ class Player(pygame.sprite.Sprite):
         self.x = self.rect.centerx
         self.y = self.rect.centery
 
-    def move(self):
+    def move(self, grounded):
         key = pygame.key.get_pressed()
         if(key[pygame.K_LEFT]):
             self.deltax -= 0.5
         if(key[pygame.K_RIGHT]):
             self.deltax += 0.5
-        if(key[pygame.K_UP]):
-            self.deltay -= 5
+        if(key[pygame.K_UP] and grounded):
+            self.deltay -= 10
         if(not key[pygame.K_LEFT] and not key[pygame.K_RIGHT] and self.deltax != 0):
             self.deltax = (abs(self.deltax)-0.5) * abs(self.deltax)/self.deltax
-        self.deltay += 0.5
+        self.deltay += 0.6
         self.x += self.deltax
         self.y += self.deltay
         self.rect.centerx = self.x
         self.rect.centery = self.y
         if(self.deltay > 10):
             self.deltay = 10
-        if(self.deltax < -3):
-            self.deltax = -3
-        if(self.deltax > 3):
-            self.deltax = 3
+        if(self.deltax < -4):
+            self.deltax = -4
+        if(self.deltax > 4):
+            self.deltax = 4
         print(self.deltax)
 
     def collideblock(self, object):
+        grounded = False
         if(pygame.sprite.collide_mask(self, object)):
             correct = [0, 0]
             amount = 0
             if(self.y < object.rect.centery - object.height/2):
                 correct = [0, -1]
                 amount = (self.y + self.height/2) - (object.rect.centery - object.height/2)
+                grounded = True
             elif(self.y > object.rect.centery + object.height/2):
                 correct = [0, 1]
                 amount = (object.rect.centery + object.height/2) - (self.y - self.height/2)
@@ -68,6 +71,8 @@ class Player(pygame.sprite.Sprite):
             self.deltay -= abs(correct[1]) * self.deltay
             self.rect.centerx = self.x
             self.rect.centery = self.y
+        return(grounded)
+
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, color):
@@ -98,6 +103,9 @@ player = Player(400, 300)
 
 blocks = pygame.sprite.Group()
 blocks.add(Block(400, 400, 100, 20, (75, 75, 120)))
+blocks.add(Block(500, 375, 100, 70, (75, 75, 120)))
+
+onground = False
 
 # Main game loop
 running = True
@@ -110,9 +118,11 @@ while running:
     # Fill the screen with a color (e.g., white)
     screen.fill(WHITE)
 
-    player.move()
+    player.move(onground)
+    onground = False
     for block in blocks:
-        player.collideblock(block)
+        if(player.collideblock(block)):
+            onground = True
     screen.blit(player.image, player.rect.topleft)
 
     blocks.draw(screen)
