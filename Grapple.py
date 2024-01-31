@@ -45,30 +45,25 @@ class Player(pygame.sprite.Sprite):
             self.deltax = -4
         if(self.deltax > 4):
             self.deltax = 4
-        print(self.deltax)
 
     def collideblock(self, object):
         grounded = False
         if(pygame.sprite.collide_mask(self, object)):
             correct = [0, 0]
-            amount = 0
-            if(self.y < object.rect.centery - object.height/2):
-                correct = [0, -1]
-                amount = (self.y + self.height/2) - (object.rect.centery - object.height/2)
+            if(self.y + self.height/2 > object.rect.centery - object.height/2 and self.y < object.rect.top):
+                correct[1] = (object.rect.centery - object.height/2) - (self.y + self.height/2)
                 grounded = True
-            elif(self.y > object.rect.centery + object.height/2):
-                correct = [0, 1]
-                amount = (object.rect.centery + object.height/2) - (self.y - self.height/2)
-            if(self.x < object.rect.centerx - object.width/2):
-                correct = [-1, 0]
-                amount = (self.x + self.width/2) - (object.rect.centerx - object.width/2)
-            elif(self.x > object.rect.centerx + object.width/2):
-                correct = [1, 0]
-                amount = (object.rect.centerx + object.width/2) - (self.x - self.width/2)
-            self.x += correct[0] * amount
-            self.y += correct[1] * amount
-            self.deltax -= abs(correct[0]) * self.deltax
-            self.deltay -= abs(correct[1]) * self.deltay
+            elif(self.y - self.height/2 < object.rect.centery + object.height/2 and self.y > object.rect.bottom):
+                correct[1] = (object.rect.centery + object.height/2) - (self.y - self.height/2)
+            if(self.x + self.width/2 > object.rect.centerx - object.width/2 and self.x < object.rect.left):
+                correct[0] = (object.rect.centerx - object.width/2) - (self.x + self.width/2)
+            elif(self.x - self.width/2 < object.rect.centerx + object.width/2 and self.x > object.rect.right):
+                correct[0] = (object.rect.centerx + object.width/2) - (self.x - self.width/2)
+            self.x += correct[0]
+            self.y += correct[1]
+            print(correct)
+            self.deltax -= self.deltax * correct[0]/(self.width/2)
+            self.deltay -= self.deltay * correct[1]/(self.width/2)
             self.rect.centerx = self.x
             self.rect.centery = self.y
         return(grounded)
