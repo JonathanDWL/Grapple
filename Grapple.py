@@ -55,20 +55,33 @@ class Player(pygame.sprite.Sprite):
         grounded = False
         if(pygame.sprite.collide_mask(self, object)):
             correct = [0, 0]
+            yd = 0
+            xd = 0
             if(self.rect.bottom > object.rect.top and self.y < object.rect.top):
-                correct[1] = object.rect.top - self.rect.bottom
+                yd = object.rect.top - self.rect.bottom
                 grounded = True
             elif(self.rect.top < object.rect.bottom and self.y > object.rect.bottom):
-                correct[1] = object.rect.bottom - self.rect.top
+                yd = object.rect.bottom - self.rect.top
             if(self.rect.right > object.rect.left and self.x < object.rect.left):
-                correct[0] = object.rect.left - self.rect.right
+                xd = object.rect.left - self.rect.right
             elif(self.rect.left < object.rect.right and self.x > object.rect.right):
-                correct[0] = object.rect.right - self.rect.left
-            print(self.deltay)
+                xd = object.rect.right - self.rect.left
+            hd = (xd**2 + yd**2)**(1/2)
+            if(xd != 0):
+                th = math.atan(yd/xd)
+            else:
+                th = math.pi/2
+            w = self.width/2
+            h = self.height/2
+            hyp = w*h/((h**2*math.cos(th)**2 + w**2*math.sin(th)**2)**(1/2))
+            correct = [sign(xd)*abs((hyp-hd)*math.cos(th)), sign(yd)*abs((hyp-hd)*math.sin(th))]
             self.x += correct[0]
             self.y += correct[1]
-            self.deltax -= self.deltax * abs(sign(correct[0]))
-            self.deltay -= self.deltay * abs(sign(correct[1]))
+            print(correct[1])
+            print(hyp-hd)
+            print(abs(correct[1]/(hyp-hd)))
+            self.deltax -= self.deltax * abs(correct[0]/(hyp-hd))
+            self.deltay -= self.deltay * abs(correct[1]/(hyp-hd))
             self.rect.centerx = self.x
             self.rect.centery = self.y
         return(grounded)
