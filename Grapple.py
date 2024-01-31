@@ -8,6 +8,11 @@ import pygame
 import sys
 import math
 
+def sign(num):
+    if(num == 0):
+        return(0)
+    else:
+        return(abs(num)/num)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -50,20 +55,20 @@ class Player(pygame.sprite.Sprite):
         grounded = False
         if(pygame.sprite.collide_mask(self, object)):
             correct = [0, 0]
-            if(self.y + self.height/2 > object.rect.centery - object.height/2 and self.y < object.rect.top):
-                correct[1] = (object.rect.centery - object.height/2) - (self.y + self.height/2)
+            if(self.rect.bottom > object.rect.top and self.y < object.rect.top):
+                correct[1] = object.rect.top - self.rect.bottom
                 grounded = True
-            elif(self.y - self.height/2 < object.rect.centery + object.height/2 and self.y > object.rect.bottom):
-                correct[1] = (object.rect.centery + object.height/2) - (self.y - self.height/2)
-            if(self.x + self.width/2 > object.rect.centerx - object.width/2 and self.x < object.rect.left):
-                correct[0] = (object.rect.centerx - object.width/2) - (self.x + self.width/2)
-            elif(self.x - self.width/2 < object.rect.centerx + object.width/2 and self.x > object.rect.right):
-                correct[0] = (object.rect.centerx + object.width/2) - (self.x - self.width/2)
+            elif(self.rect.top < object.rect.bottom and self.y > object.rect.bottom):
+                correct[1] = object.rect.bottom - self.rect.top
+            if(self.rect.right > object.rect.left and self.x < object.rect.left):
+                correct[0] = object.rect.left - self.rect.right
+            elif(self.rect.left < object.rect.right and self.x > object.rect.right):
+                correct[0] = object.rect.right - self.rect.left
+            print(self.deltay)
             self.x += correct[0]
             self.y += correct[1]
-            print(correct)
-            self.deltax -= self.deltax * correct[0]/(self.width/2)
-            self.deltay -= self.deltay * correct[1]/(self.width/2)
+            self.deltax -= self.deltax * abs(sign(correct[0]))
+            self.deltay -= self.deltay * abs(sign(correct[1]))
             self.rect.centerx = self.x
             self.rect.centery = self.y
         return(grounded)
