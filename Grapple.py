@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
             self.deltay -= 10
         if(not key[pygame.K_LEFT] and not key[pygame.K_RIGHT] and self.deltax != 0):
             self.deltax = (abs(self.deltax)-0.5) * sign(self.deltax)
-            if(abs(self.deltax) < 0.1):
+            if(abs(self.deltax) < 0.2):
                 self.deltax = 0
         self.deltay += 0.6
         self.x += self.deltax
@@ -179,6 +179,9 @@ blocks.add(Block(0, 375, 700, 25, (75, 75, 120)))
 blocks.add(Block(700, 500, 100, 25, (75, 75, 120)))
 blocks.add(Block(600, 500, 50, 25, (75, 75, 120)))
 blocks.add(Block(750, 425, 100, 25, (75, 75, 120)))
+blocks.add(Block(100, 225, 700, 25, (75, 75, 120)))
+blocks.add(Block(25, 325, 50, 75, (75, 75, 120)))
+blocks.add(Block(300, 350, 50, 25, (75, 75, 120)))
 
 spikes = pygame.sprite.Group()
 spikes.add(Spike(200, 550, 25, 25, (100, 100, 250)))
@@ -189,6 +192,16 @@ spikes.add(Spike(400, 500, 25, 25, (100, 100, 250)))
 spikes.add(Spike(425, 500, 25, 25, (100, 100, 250)))
 spikes.add(Spike(600, 475, 25, 25, (100, 100, 250)))
 spikes.add(Spike(700, 475, 25, 25, (100, 100, 250)))
+spikes.add(Spike(650, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(625, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(575, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(550, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(500, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(475, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(350, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(275, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(300, 325, 25, 25, (100, 100, 250)))
+spikes.add(Spike(325, 325, 25, 25, (100, 100, 250)))
 
 onground = False
 ongroundlast = False
