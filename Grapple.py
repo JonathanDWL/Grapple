@@ -150,6 +150,15 @@ class Spike(pygame.sprite.Sprite):
         pygame.draw.polygon(self.image, color, [(self.width/2, 0), (0, self.height), (self.width, self.height)], width=0)
         self.rect = self.image.get_rect(topleft = (x, y))
 
+class Win(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Win, self).__init__()
+        self.image = pygame.Surface((800, 600))
+        self.image.fill((25, 25, 50))
+        self.rect = self.image.get_rect(topleft = (0, 0))
+        font = pygame.font.Font(None, 150)
+        self.yay = font.render("Congrats.", False, (64, 255, 64))
+
 
 # Initialize Pygame and give access to all the methods in the package
 pygame.init()
@@ -173,7 +182,7 @@ blocks = pygame.sprite.Group()
 blocks.add(Block(0, 0, 800, 25, (75, 75, 120)))
 blocks.add(Block(0, 575, 800, 25, (75, 75, 120)))
 blocks.add(Block(0, 0, 25, 600, (75, 75, 120)))
-blocks.add(Block(775, 0, 25, 600, (75, 75, 120)))
+blocks.add(Block(775, 150, 25, 450, (75, 75, 120)))
 blocks.add(Block(300, 525, 200, 100, (75, 75, 120)))
 blocks.add(Block(0, 375, 700, 25, (75, 75, 120)))
 blocks.add(Block(700, 500, 100, 25, (75, 75, 120)))
@@ -203,8 +212,12 @@ spikes.add(Spike(275, 350, 25, 25, (100, 100, 250)))
 spikes.add(Spike(300, 325, 25, 25, (100, 100, 250)))
 spikes.add(Spike(325, 325, 25, 25, (100, 100, 250)))
 
+end = (800, 0, 50, 600)
+win = Win()
+
 onground = False
 ongroundlast = False
+won = False
 
 # Main game loop
 running = True
@@ -215,7 +228,7 @@ while running:
             running = False
 
     # Fill the screen with a color (e.g., white)
-    screen.fill(WHITE)
+    screen.fill((230, 230, 255))
 
     player.move(onground)
     onground = False
@@ -227,14 +240,20 @@ while running:
         if(player.collidespike(spike)):
             kill = True
     player.squish(ongroundlast)
+    if(player.rect.colliderect(end)):
+        won = True
     ongroundlast = onground
+    screen.blit(player.image, player.rect.topleft)
     if(kill):
         player.kill()
         player = Player(50, 560)
-    screen.blit(player.image, player.rect.topleft)
 
     blocks.draw(screen)
     spikes.draw(screen)
+
+    if(won):
+        screen.blit(win.image, win.rect.topleft)
+        win.image.blit(win.yay, (150, 250))
 
     # Update the display
     pygame.display.flip()
