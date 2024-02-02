@@ -191,6 +191,10 @@ blocks.add(Block(750, 425, 100, 25, (75, 75, 120)))
 blocks.add(Block(100, 225, 700, 25, (75, 75, 120)))
 blocks.add(Block(25, 325, 50, 75, (75, 75, 120)))
 blocks.add(Block(300, 350, 50, 25, (75, 75, 120)))
+blocks.add(Block(200, 175, 150, 50, (75, 75, 120)))
+blocks.add(Block(225, 100, 25, 25, (75, 75, 120)))
+blocks.add(Block(375, 175, 100, 25, (75, 75, 120)))
+blocks.add(Block(525, 100, 100, 25, (75, 75, 120)))
 
 spikes = pygame.sprite.Group()
 spikes.add(Spike(200, 550, 25, 25, (100, 100, 250)))
@@ -211,6 +215,24 @@ spikes.add(Spike(350, 350, 25, 25, (100, 100, 250)))
 spikes.add(Spike(275, 350, 25, 25, (100, 100, 250)))
 spikes.add(Spike(300, 325, 25, 25, (100, 100, 250)))
 spikes.add(Spike(325, 325, 25, 25, (100, 100, 250)))
+spikes.add(Spike(25, 300, 25, 25, (100, 100, 250)))
+spikes.add(Spike(225, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(200, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(175, 350, 25, 25, (100, 100, 250)))
+spikes.add(Spike(225, 75, 25, 25, (100, 100, 250)))
+spikes.add(Spike(225, 150, 25, 25, (100, 100, 250)))
+spikes.add(Spike(250, 150, 25, 25, (100, 100, 250)))
+spikes.add(Spike(325, 150, 25, 25, (100, 100, 250)))
+spikes.add(Spike(375, 150, 25, 25, (100, 100, 250)))
+spikes.add(Spike(400, 150, 25, 25, (100, 100, 250)))
+spikes.add(Spike(425, 150, 25, 25, (100, 100, 250)))
+spikes.add(Spike(550, 200, 25, 25, (100, 100, 250)))
+spikes.add(Spike(575, 200, 25, 25, (100, 100, 250)))
+spikes.add(Spike(600, 200, 25, 25, (100, 100, 250)))
+spikes.add(Spike(625, 200, 25, 25, (100, 100, 250)))
+spikes.add(Spike(650, 200, 25, 25, (100, 100, 250)))
+spikes.add(Spike(675, 200, 25, 25, (100, 100, 250)))
+spikes.add(Spike(600, 75, 25, 25, (100, 100, 250)))
 
 end = (800, 0, 50, 600)
 win = Win()
@@ -218,6 +240,7 @@ win = Win()
 onground = False
 ongroundlast = False
 won = False
+count = 120
 
 # Main game loop
 running = True
@@ -254,6 +277,10 @@ while running:
     if(won):
         screen.blit(win.image, win.rect.topleft)
         win.image.blit(win.yay, (150, 250))
+        count -= 1
+
+    if(count <= 0):
+        break
 
     # Update the display
     pygame.display.flip()
